@@ -24,11 +24,11 @@ pipeline {
             steps {
                 echo 'Cleaning project...'
                 script {
-                    def pomFile = 'pom.xml'
+                    def pomFile = 'C:/Users/Dell/Desktop/eventsProject/pom.xml' // Full path to pom.xml
                     if (fileExists(pomFile)) {
                         echo "Found pom.xml, running mvn clean..."
                         // Ensure that we're in the right directory
-                        sh 'mvn clean'
+                        sh "mvn clean -f ${pomFile}"  // Use full path to pom.xml
                     } else {
                         error "pom.xml not found, unable to run mvn clean"
                     }
@@ -40,10 +40,10 @@ pipeline {
             steps {
                 script {
                     // Checking if pom.xml is present before compiling
-                    def pomFile = 'pom.xml'
+                    def pomFile = 'C:/Users/Dell/Desktop/eventsProject/pom.xml' // Full path to pom.xml
                     if (fileExists(pomFile)) {
                         echo "pom.xml found, compiling project..."
-                        sh 'mvn compile'
+                        sh "mvn compile -f ${pomFile}"  // Use full path to pom.xml
                     } else {
                         error "pom.xml not found, unable to compile"
                     }
@@ -55,10 +55,10 @@ pipeline {
             steps {
                 script {
                     // Check if pom.xml exists before packaging
-                    def pomFile = 'pom.xml'
+                    def pomFile = 'C:/Users/Dell/Desktop/eventsProject/pom.xml' // Full path to pom.xml
                     if (fileExists(pomFile)) {
                         echo "pom.xml found, creating package..."
-                        sh 'mvn package -DskipTests'
+                        sh "mvn package -f ${pomFile} -DskipTests"  // Use full path to pom.xml
                     } else {
                         error "pom.xml not found, unable to package"
                     }
