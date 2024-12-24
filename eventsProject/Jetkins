@@ -16,7 +16,13 @@ pipeline {
             steps {
                 echo 'Fetching code from GitHub...'
                 git branch: 'main', url: 'https://github.com/FLUSH611/DevO.git'
-                sh 'ls -alh'  // List files in the workspace to check if pom.xml is there
+            }
+        }
+
+        stage('Verify Workspace Content') {
+            steps {
+                echo 'Listing files in the workspace to verify pom.xml location...'
+                sh 'ls -alh'  // List files in the current directory (workspace) after checkout
             }
         }
 
@@ -24,11 +30,10 @@ pipeline {
             steps {
                 echo 'Cleaning project...'
                 script {
-                    def pomFile = 'C:/Users/Dell/Desktop/eventsProject/pom.xml' // Full path to pom.xml
+                    def pomFile = 'pom.xml'
                     if (fileExists(pomFile)) {
                         echo "Found pom.xml, running mvn clean..."
-                        // Ensure that we're in the right directory
-                        sh "mvn clean -f ${pomFile}"  // Use full path to pom.xml
+                        sh "mvn clean -f ${pomFile}"  // Use relative path to pom.xml
                     } else {
                         error "pom.xml not found, unable to run mvn clean"
                     }
@@ -40,10 +45,10 @@ pipeline {
             steps {
                 script {
                     // Checking if pom.xml is present before compiling
-                    def pomFile = 'C:/Users/Dell/Desktop/eventsProject/pom.xml' // Full path to pom.xml
+                    def pomFile = 'pom.xml'
                     if (fileExists(pomFile)) {
                         echo "pom.xml found, compiling project..."
-                        sh "mvn compile -f ${pomFile}"  // Use full path to pom.xml
+                        sh "mvn compile -f ${pomFile}"  // Use relative path to pom.xml
                     } else {
                         error "pom.xml not found, unable to compile"
                     }
@@ -55,10 +60,10 @@ pipeline {
             steps {
                 script {
                     // Check if pom.xml exists before packaging
-                    def pomFile = 'C:/Users/Dell/Desktop/eventsProject/pom.xml' // Full path to pom.xml
+                    def pomFile = 'pom.xml'
                     if (fileExists(pomFile)) {
                         echo "pom.xml found, creating package..."
-                        sh "mvn package -f ${pomFile} -DskipTests"  // Use full path to pom.xml
+                        sh "mvn package -f ${pomFile} -DskipTests"  // Use relative path to pom.xml
                     } else {
                         error "pom.xml not found, unable to package"
                     }
