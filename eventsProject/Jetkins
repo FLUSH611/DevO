@@ -42,35 +42,16 @@ pipeline {
         }
 
         stage('Compile Stage') {
-            steps {
-                script {
-                    // Checking if pom.xml is present before compiling
-                    def pomFile = 'pom.xml'
-                    if (fileExists(pomFile)) {
-                        echo "pom.xml found, compiling project..."
-                        sh "mvn compile -f ${pomFile}"  // Use relative path to pom.xml
-                    } else {
-                        error "pom.xml not found, unable to compile"
+                    steps {
+                        sh 'mvn clean compile'
                     }
                 }
-            }
-        }
 
-        stage('Package Stage') {
-            steps {
-                script {
-                    // Check if pom.xml exists before packaging
-                    def pomFile = 'pom.xml'
-                    if (fileExists(pomFile)) {
-                        echo "pom.xml found, creating package..."
-                        sh "mvn package -f ${pomFile} -DskipTests"  // Use relative path to pom.xml
-                    } else {
-                        error "pom.xml not found, unable to package"
+                stage('Package Stage') {
+                    steps {
+                        sh 'mvn package -DskipTests'
                     }
                 }
-            }
-        }
-    }
 
     post {
         success {
